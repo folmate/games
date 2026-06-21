@@ -1,13 +1,56 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import TagInput from '../components/TagInput.vue'
 import AssignmentCard from '../components/AssignmentCard.vue'
+
+const router = useRouter()
+const route = useRoute()
 
 const names = ref([])
 const places = ref([])
 const tools = ref([])
 const assignments = ref([])
 const generation = ref(0)
+
+function encodeState() {
+  const json = JSON.stringify({
+    n: names.value,
+    p: places.value,
+    t: tools.value,
+    a: assignments.value.map(a => ({ n: a.name, x: a.next, p: a.place, t: a.tool, d: a.done })),
+  })
+  let bin = ''
+  new TextEncoder().encode(json).forEach(b => { bin += String.fromCharCode(b) })
+  return btoa(bin)
+}
+
+function decodeState(s) {
+  try {
+    const bytes = Uint8Array.from(atob(s), c => c.charCodeAt(0))
+    return JSON.parse(new TextDecoder().decode(bytes))
+  } catch {
+    return null
+  }
+}
+
+onMounted(() => {
+  const s = route.query.s
+  if (!s) return
+  const state = decodeState(s)
+  if (!state) return
+  names.value = state.n ?? []
+  places.value = state.p ?? []
+  tools.value = state.t ?? []
+  if (state.a?.length) {
+    assignments.value = state.a.map(a => ({ name: a.n, next: a.x, place: a.p, tool: a.t, done: a.d }))
+  }
+})
+
+watch([names, places, tools, assignments], () => {
+  const empty = !names.value.length && !places.value.length && !tools.value.length && !assignments.value.length
+  router.replace({ query: empty ? {} : { s: encodeState() } })
+}, { deep: true })
 
 const validation = computed(() => {
   const n = names.value.length
