@@ -40,3 +40,10 @@ body {
   white-space: nowrap;
   border-width: 0;
 }
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

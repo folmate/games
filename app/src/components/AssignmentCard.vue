@@ -140,4 +140,15 @@ defineEmits(['toggle-done'])
   padding-left: 20px;
   margin-top: 2px;
 }
+
+@media print {
+  .card {
+    border-color: #aaaaaa;
+    animation: none;
+  }
+
+  .card.done {
+    border-color: #16a34a;
+  }
+}
 </style>
