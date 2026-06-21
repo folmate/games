@@ -1,0 +1,37 @@
+{
+  "page": {
+    "title": "Role assignment",
+    "subtitle": "Generate a random loop-free role assignment chain.",
+    "sr_description": "Assign roles — generate a random loop-free chain where each person gets a next person, a place, and a tool."
+  },
+  "inputs": {
+    "names": "Names",
+    "places": "Places",
+    "tools": "Tools",
+    "sort_aria": "Sort {label} alphabetically",
+    "remove_aria": "Remove {item}"
+  },
+  "validation": {
+    "error": {
+      "places_only": "Need {count} more place(s) to cover all {names} names.",
+      "tools_only": "Need {count} more tool(s) to cover all {names} names.",
+      "both": "Need {places} more place(s) and/or {tools} more tool(s) to cover all {names} names."
+    },
+    "warning": {
+      "places_only": "You have {count} unused place(s) — they won't all be assigned.",
+      "tools_only": "You have {count} unused tool(s) — they won't all be assigned.",
+      "both": "You have {places} unused place(s) and/or {tools} unused tool(s) — they won't all be assigned."
+    }
+  },
+  "generate": "Generate",
+  "results": {
+    "label": "Assignment chain",
+    "count": "{n} assignments"
+  },
+  "card": {
+    "done_aria": "{name} — click to mark as written down",
+    "next": "next",
+    "place": "place",
+    "tool": "tool"
+  }
+}

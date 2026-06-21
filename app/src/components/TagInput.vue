@@ -1,5 +1,8 @@
 <script setup>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps({
   modelValue: { type: Array, required: true },
@@ -74,7 +77,7 @@ function handlePaste(e) {
       <button
         type="button"
         class="sort-btn"
-        :aria-label="`Sort ${label} alphabetically`"
+        :aria-label="t('inputs.sort_aria', { label: props.label })"
         @click="sortItems"
       >
         <i class="ti ti-arrows-sort" aria-hidden="true"></i>
@@ -86,7 +89,7 @@ function handlePaste(e) {
         <button
           type="button"
           class="tag-x"
-          :aria-label="`Remove ${item}`"
+          :aria-label="t('inputs.remove_aria', { item })"
           @click.stop="removeItem(i)"
         >×</button>
       </span>

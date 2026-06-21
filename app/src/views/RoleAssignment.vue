@@ -1,11 +1,18 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import TagInput from '../components/TagInput.vue'
 import AssignmentCard from '../components/AssignmentCard.vue'
 
 const router = useRouter()
 const route = useRoute()
+const { t, locale } = useI18n()
+
+function setLocale(lang) {
+  locale.value = lang
+  try { localStorage.setItem('locale', lang) } catch { /* ignore */ }
+}
 
 const names = ref([])
 const places = ref([])
@@ -60,12 +67,11 @@ const validation = computed(() => {
   const missingTools = Math.max(0, n - tools.value.length)
 
   if (missingPlaces > 0 || missingTools > 0) {
-    const parts = []
-    if (missingPlaces > 0) parts.push(`${missingPlaces} more place(s)`)
-    if (missingTools > 0) parts.push(`${missingTools} more tool(s)`)
+    const key = (missingPlaces > 0 && missingTools > 0) ? 'validation.error.both'
+      : missingPlaces > 0 ? 'validation.error.places_only' : 'validation.error.tools_only'
     return {
       type: 'error',
-      message: `Need ${parts.join(' and/or ')} to cover all ${n} names.`,
+      message: t(key, { places: missingPlaces, tools: missingTools, count: missingPlaces || missingTools, names: n }),
       canGenerate: false,
     }
   }
@@ -74,12 +80,11 @@ const validation = computed(() => {
   const extraTools = tools.value.length - n
 
   if (extraPlaces > 0 || extraTools > 0) {
-    const parts = []
-    if (extraPlaces > 0) parts.push(`${extraPlaces} unused place(s)`)
-    if (extraTools > 0) parts.push(`${extraTools} unused tool(s)`)
+    const key = (extraPlaces > 0 && extraTools > 0) ? 'validation.warning.both'
+      : extraPlaces > 0 ? 'validation.warning.places_only' : 'validation.warning.tools_only'
     return {
       type: 'warning',
-      message: `You have ${parts.join(' and/or ')} — they won't all be assigned.`,
+      message: t(key, { places: extraPlaces, tools: extraTools, count: extraPlaces || extraTools }),
       canGenerate: true,
     }
   }
@@ -127,19 +132,29 @@ function toggleDone(index) {
 
 <template>
   <main class="page">
-    <h2 class="sr-only">
-      Assign roles — generate a random loop-free chain where each person gets a next person, a place, and a tool.
-    </h2>
+    <h2 class="sr-only">{{ t('page.sr_description') }}</h2>
 
     <div class="page-header">
-      <h1 class="page-title">Role assignment</h1>
-      <p class="page-subtitle">Generate a random loop-free role assignment chain.</p>
+      <div>
+        <h1 class="page-title">{{ t('page.title') }}</h1>
+        <p class="page-subtitle">{{ t('page.subtitle') }}</p>
+      </div>
+      <div class="locale-switcher" role="group" aria-label="Language">
+        <button
+          v-for="lang in ['en', 'hu']"
+          :key="lang"
+          type="button"
+          class="locale-btn"
+          :class="{ active: locale === lang }"
+          @click="setLocale(lang)"
+        >{{ lang.toUpperCase() }}</button>
+      </div>
     </div>
 
     <div class="input-grid">
-      <TagInput v-model="names" label="Names" :allow-duplicates="false" />
-      <TagInput v-model="places" label="Places" :allow-duplicates="true" />
-      <TagInput v-model="tools" label="Tools" :allow-duplicates="true" />
+      <TagInput v-model="names" :label="t('inputs.names')" :allow-duplicates="false" />
+      <TagInput v-model="places" :label="t('inputs.places')" :allow-duplicates="true" />
+      <TagInput v-model="tools" :label="t('inputs.tools')" :allow-duplicates="true" />
     </div>
 
     <div
@@ -165,14 +180,14 @@ function toggleDone(index) {
         @click="generate"
       >
         <i class="ti ti-refresh" aria-hidden="true"></i>
-        Generate
+        {{ t('generate') }}
       </button>
     </div>
 
     <template v-if="assignments.length > 0">
       <div class="results-header">
-        <span class="results-label">Assignment chain</span>
-        <span class="count-pill">{{ assignments.length }} assignments</span>
+        <span class="results-label">{{ t('results.label') }}</span>
+        <span class="count-pill">{{ t('results.count', { n: assignments.length }) }}</span>
       </div>
       <div class="results-grid">
         <AssignmentCard
@@ -195,7 +210,35 @@ function toggleDone(index) {
 }
 
 .page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
   margin-bottom: 2rem;
+}
+
+.locale-switcher {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.locale-btn {
+  background: none;
+  border: 1px solid var(--border-emphasis);
+  border-radius: var(--radius-md);
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  color: var(--text-secondary);
+}
+
+.locale-btn.active {
+  background: var(--text-primary);
+  color: var(--bg);
+  border-color: var(--text-primary);
 }
 
 .page-title {

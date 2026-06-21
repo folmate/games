@@ -1,10 +1,14 @@
 <script setup>
+import { useI18n } from 'vue-i18n'
+
 defineProps({
   assignment: { type: Object, required: true },
   index: { type: Number, required: true },
 })
 
 defineEmits(['toggle-done'])
+
+const { t } = useI18n()
 </script>
 
 <template>
@@ -15,7 +19,7 @@ defineEmits(['toggle-done'])
     role="button"
     tabindex="0"
     :aria-pressed="assignment.done"
-    :aria-label="`${assignment.name} — click to mark as written down`"
+    :aria-label="t('card.done_aria', { name: assignment.name })"
     @click="$emit('toggle-done')"
     @keydown.enter.prevent="$emit('toggle-done')"
     @keydown.space.prevent="$emit('toggle-done')"
@@ -32,21 +36,21 @@ defineEmits(['toggle-done'])
     <div class="card-field">
       <div class="card-field-top">
         <i class="ti ti-arrow-right" aria-hidden="true"></i>
-        <span class="card-field-label">next</span>
+        <span class="card-field-label">{{ t('card.next') }}</span>
       </div>
       <span class="card-field-value">{{ assignment.next }}</span>
     </div>
     <div class="card-field">
       <div class="card-field-top">
         <i class="ti ti-map-pin" aria-hidden="true"></i>
-        <span class="card-field-label">place</span>
+        <span class="card-field-label">{{ t('card.place') }}</span>
       </div>
       <span class="card-field-value">{{ assignment.place }}</span>
     </div>
     <div class="card-field">
       <div class="card-field-top">
         <i class="ti ti-tool" aria-hidden="true"></i>
-        <span class="card-field-label">tool</span>
+        <span class="card-field-label">{{ t('card.tool') }}</span>
       </div>
       <span class="card-field-value">{{ assignment.tool }}</span>
     </div>

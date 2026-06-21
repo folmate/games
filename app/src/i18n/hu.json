@@ -1,0 +1,37 @@
+{
+  "page": {
+    "title": "Szereposztás",
+    "subtitle": "Véletlenszerű, hurok mentes szereposztási lánc generálása.",
+    "sr_description": "Szerepek kiosztása — véletlenszerű lánc generálása, ahol mindenki kap egy következő személyt, egy helyszínt és egy eszközt."
+  },
+  "inputs": {
+    "names": "Nevek",
+    "places": "Helyszínek",
+    "tools": "Eszközök",
+    "sort_aria": "{label} rendezése ábécé sorrendbe",
+    "remove_aria": "{item} eltávolítása"
+  },
+  "validation": {
+    "error": {
+      "places_only": "Még {count} helyszín szükséges a(z) {names} névhez.",
+      "tools_only": "Még {count} eszköz szükséges a(z) {names} névhez.",
+      "both": "Még {places} helyszín és/vagy {tools} eszköz szükséges a(z) {names} névhez."
+    },
+    "warning": {
+      "places_only": "{count} helyszín nem kerül kiosztásra.",
+      "tools_only": "{count} eszköz nem kerül kiosztásra.",
+      "both": "{places} helyszín és/vagy {tools} eszköz nem kerül kiosztásra."
+    }
+  },
+  "generate": "Generálás",
+  "results": {
+    "label": "Szereposztási lánc",
+    "count": "{n} szereposztás"
+  },
+  "card": {
+    "done_aria": "{name} — kattintással jelölhető késznek",
+    "next": "következő",
+    "place": "helyszín",
+    "tool": "eszköz"
+  }
+}
