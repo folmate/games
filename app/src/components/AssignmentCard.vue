@@ -12,16 +12,21 @@ defineEmits(['toggle-done'])
     class="card"
     :class="{ done: assignment.done }"
     :style="{ animationDelay: `${index * 30}ms` }"
+    role="button"
+    tabindex="0"
+    :aria-pressed="assignment.done"
+    :aria-label="`${assignment.name} — click to mark as written down`"
+    @click="$emit('toggle-done')"
+    @keydown.enter.prevent="$emit('toggle-done')"
+    @keydown.space.prevent="$emit('toggle-done')"
   >
     <div class="card-head">
       <span class="card-name">{{ assignment.name }}</span>
-      <input
-        type="checkbox"
-        class="card-check"
-        :checked="assignment.done"
-        :aria-label="`Mark ${assignment.name} as done`"
-        @change="$emit('toggle-done')"
-      />
+      <i
+        class="ti card-status-icon"
+        :class="assignment.done ? 'ti-check' : 'ti-square'"
+        aria-hidden="true"
+      ></i>
     </div>
     <hr class="card-hr" />
     <div class="card-field">
@@ -56,16 +61,22 @@ defineEmits(['toggle-done'])
 
 .card {
   background: var(--bg);
-  border: 0.5px solid var(--border-emphasis);
+  border: 1px solid var(--border-emphasis);
   border-radius: var(--radius-lg);
   padding: 14px;
+  cursor: pointer;
+  user-select: none;
   animation: card-in 200ms ease both;
-  transition: opacity 150ms ease, filter 150ms ease;
+  transition: background 150ms ease, border-color 150ms ease;
+}
+
+.card:hover:not(.done) {
+  background: var(--bg-secondary);
 }
 
 .card.done {
-  opacity: 0.38;
-  filter: grayscale(1);
+  background: #f0faf2;
+  border-color: rgba(22, 163, 74, 0.35);
 }
 
 .card-head {
@@ -81,12 +92,15 @@ defineEmits(['toggle-done'])
   color: var(--text-primary);
 }
 
-.card-check {
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-  accent-color: var(--text-primary);
+.card-status-icon {
+  font-size: 1rem;
+  color: var(--text-tertiary);
   flex-shrink: 0;
+  transition: color 150ms ease;
+}
+
+.card.done .card-status-icon {
+  color: #16a34a;
 }
 
 .card-hr {
@@ -107,13 +121,13 @@ defineEmits(['toggle-done'])
   display: flex;
   align-items: center;
   gap: 4px;
-  color: var(--text-tertiary);
+  color: var(--text-secondary);
   font-size: 0.875rem;
 }
 
 .card-field-label {
   font-size: 0.6875rem;
-  font-weight: 500;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
