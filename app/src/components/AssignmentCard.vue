@@ -30,18 +30,24 @@ defineEmits(['toggle-done'])
     </div>
     <hr class="card-hr" />
     <div class="card-field">
-      <i class="ti ti-arrow-right card-icon" aria-hidden="true"></i>
-      <span class="card-field-label">next</span>
+      <div class="card-field-top">
+        <i class="ti ti-arrow-right" aria-hidden="true"></i>
+        <span class="card-field-label">next</span>
+      </div>
       <span class="card-field-value">{{ assignment.next }}</span>
     </div>
     <div class="card-field">
-      <i class="ti ti-map-pin card-icon" aria-hidden="true"></i>
-      <span class="card-field-label">place</span>
+      <div class="card-field-top">
+        <i class="ti ti-map-pin" aria-hidden="true"></i>
+        <span class="card-field-label">place</span>
+      </div>
       <span class="card-field-value">{{ assignment.place }}</span>
     </div>
     <div class="card-field">
-      <i class="ti ti-tool card-icon" aria-hidden="true"></i>
-      <span class="card-field-label">tool</span>
+      <div class="card-field-top">
+        <i class="ti ti-tool" aria-hidden="true"></i>
+        <span class="card-field-label">tool</span>
+      </div>
       <span class="card-field-value">{{ assignment.tool }}</span>
     </div>
   </div>
@@ -99,43 +105,42 @@ defineEmits(['toggle-done'])
 }
 
 .card-field {
-  display: flex;
-  align-items: baseline;
-  gap: 5px;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .card-field:last-child {
   margin-bottom: 0;
 }
 
-.card-icon {
-  font-size: 0.8125rem;
+.card-field-top {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   color: var(--text-secondary);
-  flex-shrink: 0;
+  font-size: 0.875rem;
 }
 
 .card-field-label {
   font-size: 0.6875rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-secondary);
-  flex-shrink: 0;
+  letter-spacing: 0.04em;
 }
 
 .card-field-value {
+  display: block;
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--text-primary);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  padding-left: 20px;
+  margin-top: 2px;
 }
 
 @media print {
   .card {
-    border-color: #aaaaaa;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    border-color: #555555;
     animation: none;
   }
 
